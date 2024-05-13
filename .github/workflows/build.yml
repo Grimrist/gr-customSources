@@ -28,8 +28,11 @@ jobs:
     - name: Setup Miniconda
       uses: conda-incubator/setup-miniconda@v3.0.4
       with:
+        miniconda-version: "latest"
         channels: conda-forge, defaults
         auto-activate-base: true
+        activate-environment: ""
+        auto-update-conda: true
     - run: conda install -n base conda-build conda-forge-pinning
     - run: conda upgrade -n base conda-build conda-forge-pinning
 
