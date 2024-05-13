@@ -13,7 +13,7 @@ on:
 
 env:
   # Path to the solution file relative to the root of the project.
-  SOLUTION_FILE_PATH: ./test_build
+  SOLUTION_FILE_PATH: .
 
 permissions:
   contents: read
@@ -27,10 +27,6 @@ jobs:
     
     - name: Setup Miniconda
       uses: conda-incubator/setup-miniconda@v3.0.4
-      
-    - name: Restore NuGet packages
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
     
     - run: conda activate base
     - run: conda install -n base conda-build conda-forge-pinning
@@ -38,6 +34,4 @@ jobs:
 
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      # Add additional options to the MSBuild command line here (like platform or verbosity level).
-      # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: conda build ./.conda/recipe/ -m %CONDA_PREFIX%/conda_build_config.yaml
