@@ -27,8 +27,9 @@ jobs:
     
     - name: Setup Miniconda
       uses: conda-incubator/setup-miniconda@v3.0.4
-    
-    - run: conda activate base
+      with:
+        channels: conda-forge, defaults
+        auto-activate-base: true
     - run: conda install -n base conda-build conda-forge-pinning
     - run: conda upgrade -n base conda-build conda-forge-pinning
 
