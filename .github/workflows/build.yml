@@ -35,4 +35,4 @@ jobs:
 
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: conda build ./.conda/recipe/ -m %CONDA_PREFIX%/conda_build_config.yaml
+      run: conda build .conda\recipe\ -m %CONDA_PREFIX%\conda_build_config.yaml
