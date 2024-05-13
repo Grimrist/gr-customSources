@@ -24,6 +24,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
+    - run: pip install pygccxml
+
+    - name: Setup Doxygen
+      uses: ssciwr/doxygen-install@v1
     
     - name: Setup Miniconda
       uses: conda-incubator/setup-miniconda@v3.0.4
