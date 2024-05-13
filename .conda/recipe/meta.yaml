@@ -92,4 +92,4 @@ about:
   license_file: LICENSE
   summary: GNU Radio customSources module
   description: >
-    Square Signal generator with duty cycle option
+    Square Signal generator with duty cycle option, might add other signals later
