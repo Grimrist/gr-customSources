@@ -3,7 +3,7 @@ c_compiler:
 channel_sources:
 - conda-forge
 channel_targets:
-- gnuradio main
+- grimrist main
 cxx_compiler:
 - vs2019
 gnuradio_core:
