@@ -32,11 +32,9 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: nuget restore ${{env.SOLUTION_FILE_PATH}}
     
-    - name: Setup Requirements
-      run: |
-      conda activate base
-      conda install -n base conda-build conda-forge-pinning
-      conda upgrade -n base conda-build conda-forge-pinning
+    - run: conda activate base
+    - run: conda install -n base conda-build conda-forge-pinning
+    - run: conda upgrade -n base conda-build conda-forge-pinning
 
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
