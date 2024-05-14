@@ -15,6 +15,7 @@ namespace customSources {
 
 using output_type = float;
 customSquareSignal::sptr customSquareSignal::make(double sampling_freq,
+                                                  int waveform,
                                                   double frequency,
                                                   double ampl,
                                                   float offset,
@@ -22,7 +23,7 @@ customSquareSignal::sptr customSquareSignal::make(double sampling_freq,
                                                   double duty_cycle)
 {
     return gnuradio::make_block_sptr<customSquareSignal_impl>(
-        sampling_freq, frequency, ampl, offset, phase, duty_cycle);
+        sampling_freq, waveform, frequency, ampl, offset, phase, duty_cycle);
 }
 
 
@@ -30,6 +31,7 @@ customSquareSignal::sptr customSquareSignal::make(double sampling_freq,
  * The private constructor
  */
 customSquareSignal_impl::customSquareSignal_impl(double sampling_freq,
+                                                 int waveform,
                                                  double frequency,
                                                  double ampl,
                                                  float offset,
@@ -40,6 +42,7 @@ customSquareSignal_impl::customSquareSignal_impl(double sampling_freq,
                      gr::io_signature::make(
                          1 /* min outputs */, 1 /*max outputs */, sizeof(output_type))),
       d_sampling_freq(sampling_freq),
+      d_waveform(waveform),
       d_frequency(frequency),
       d_ampl(ampl),
       d_offset(offset),
@@ -60,15 +63,32 @@ int customSquareSignal_impl::work(int noutput_items,
 {
     auto out = static_cast<output_type*>(output_items[0]);
     gr::thread::scoped_lock l(this->d_setlock);
+    float t;
 
-    float t = (float) d_ampl + d_offset;
-    for (int i = 0; i < noutput_items; i++) {
-        if ((d_nco.get_phase() + GR_M_PI)/(2*GR_M_PI) < (d_duty_cycle))
-            out[i] = t;
-        else
-            out[i] = d_offset;
-        d_nco.step();
+    switch(d_waveform) {
+        case 0:
+            t = (float) d_ampl + d_offset;
+            for (int i = 0; i < noutput_items; i++) {
+                if ((d_nco.get_phase() + GR_M_PI)/(2*GR_M_PI) < (d_duty_cycle))
+                    out[i] = t;
+                else
+                    out[i] = d_offset;
+                d_nco.step();
+            }
+            break;
+
+        case 1:
+            for (int i = 0; i < noutput_items; i++) {
+                double offset_phase = d_nco.get_phase() + GR_M_PI;
+                if (offset_phase <= (2 * GR_M_PI * d_duty_cycle))
+                    out[i] = static_cast<float>(((d_ampl * offset_phase) / (2 * GR_M_PI * d_duty_cycle)) + d_offset);
+                else
+                    out[i] = static_cast<float>(-1 * ((d_ampl * offset_phase) / (2 * GR_M_PI * (1 - d_duty_cycle))) - (d_ampl/(d_duty_cycle - 1)) + d_offset);
+                d_nco.step();
+            }
+            break;
     }
+    
     // Tell runtime system how many output items we produced.
     return noutput_items;
 }
@@ -77,6 +97,11 @@ void customSquareSignal_impl::set_sampling_freq(double sampling_freq)
 {
     d_sampling_freq = sampling_freq;
     d_nco.set_freq(2 * GR_M_PI * this->d_frequency / this->d_sampling_freq);
+}
+
+void customSquareSignal_impl::set_waveform(int waveform)
+{
+    d_waveform = waveform;
 }
 
 void customSquareSignal_impl::set_frequency(double frequency)

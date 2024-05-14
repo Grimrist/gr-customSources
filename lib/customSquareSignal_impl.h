@@ -18,6 +18,7 @@ class customSquareSignal_impl : public customSquareSignal
 {
 private:
     double d_sampling_freq;
+    int d_waveform;
     double d_frequency;
     double d_ampl;
     float d_offset;
@@ -26,6 +27,7 @@ private:
 
 public:
     customSquareSignal_impl(double sampling_freq,
+                            int waveform,
                             double frequency,
                             double ampl,
                             float offset,
@@ -39,10 +41,12 @@ public:
              gr_vector_void_star& output_items);
     
     double sampling_freq() const { return d_sampling_freq; }
+    int waveform() const { return d_waveform; }
     double frequency() const { return d_frequency; }
     double amplitude() const { return d_ampl; }
     float offset() const { return d_offset; }
     float phase() const { return d_nco.get_phase(); }
+    void set_waveform(int waveform);
     void set_sampling_freq(double sampling_freq);
     void set_frequency(double frequency);
     void set_amplitude(double ampl);

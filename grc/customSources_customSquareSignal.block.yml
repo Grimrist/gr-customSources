@@ -4,7 +4,7 @@ category: '[customSources]'
 
 templates:
   imports: from gnuradio import customSources
-  make: customSources.customSquareSignal(${sampling_freq}, ${frequency}, ${ampl}, ${offset}, ${phase}, ${duty_cycle})
+  make: customSources.customSquareSignal(${sampling_freq}, int(${waveform}), ${frequency}, ${ampl}, ${offset}, ${phase}, ${duty_cycle})
 
 #  Make one 'parameters' list entry for every parameter you want settable from the GUI.
 #     Keys include:
@@ -13,6 +13,13 @@ templates:
 #     * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
 #     * default
 parameters:
+- id: waveform
+  label: Waveform
+  dtype: enum
+  default: '0'
+  options: ['0', '1']
+  option_labels: ['Square', 'Triangle']
+
 - id: sampling_freq
   label: Sampling Frequency
   dtype: real
@@ -21,7 +28,7 @@ parameters:
 - id: frequency
   label: Frequency
   dtype: real
-  default: 1
+  default: 1000
 
 - id: ampl
   label: Amplitude

@@ -33,6 +33,7 @@ public:
      * creating new instances.
      */
     static sptr make(double sampling_freq,
+                     int waveform,
                      double frequency = 1,
                      double ampl = 1,
                      float offset = 0,

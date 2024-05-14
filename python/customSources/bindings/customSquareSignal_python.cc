@@ -14,7 +14,7 @@
 /* BINDTOOL_GEN_AUTOMATIC(0)                                                       */
 /* BINDTOOL_USE_PYGCCXML(0)                                                        */
 /* BINDTOOL_HEADER_FILE(customSquareSignal.h)                                        */
-/* BINDTOOL_HEADER_FILE_HASH(1fdef98ca954b2b8801098b367131505)                     */
+/* BINDTOOL_HEADER_FILE_HASH(1d533832f68c22ab72e1b2e69f5bf01e)                     */
 /***********************************************************************************/
 
 #include <pybind11/complex.h>
@@ -42,6 +42,7 @@ void bind_customSquareSignal(py::module& m)
 
         .def(py::init(&customSquareSignal::make),
              py::arg("sampling_freq"),
+             py::arg("waveform"),
              py::arg("frequency") = 1,
              py::arg("ampl") = 1,
              py::arg("offset") = 0,
